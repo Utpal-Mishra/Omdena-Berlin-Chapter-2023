@@ -46,7 +46,6 @@ def app():
     st.dataframe(data.head(10))
     st.write("Data Shape: {}\n".format(data.shape))
     
-    
     ###########################################################################
     
     # data.info()
@@ -62,7 +61,7 @@ def app():
     st.dataframe(data.isnull().sum())
     st.write('Total Null Values: {}'.format(data.isnull().sum().sum()))
 
-    st.subheader("Formating Dates and Time Entries")
+    st.subheader("Formating Date and Time Entries")
     #
     data.REAL_TIME_ARR    = pd.to_datetime(data.REAL_TIME_ARR, format = '%H:%M:%S').dt.time
     data.REAL_TIME_DEP    = pd.to_datetime(data.REAL_TIME_DEP, format = '%H:%M:%S').dt.time
@@ -85,6 +84,8 @@ def app():
 
     # st.write('Total No.of Trains: {}'.format(len(data.TRAIN_NO.unique())))
 
+    ###########################################################################
+
     st.header("Visualising Data")
     st.write("Preparing New Data with Attributes: ['DELAY_DEP', 'DELAY_ARR']")
 
@@ -101,7 +102,7 @@ def app():
     dep = pd.DataFrame(delay.groupby(['DEP_STAT'])['DELAY_DEP'].mean()).reset_index()
     arr = pd.DataFrame(delay.groupby(['ARR_STAT'])['DELAY_ARR'].mean()).reset_index()
 
-    st.subheader("Pie Plot")
+    st.subheader("PIE PLOT")
     # Create subplots: use 'domain' type for Pie subplot
     fig = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
     fig.add_trace(go.Pie(labels=dep.DEP_STAT, values=dep.DELAY_DEP, hole=.5, pull=[0, 0.2], name="Departures"), 1, 1)

@@ -45,20 +45,27 @@ def app():
     # Air Transport
     path = 'Data_raw_punctuality_202301.csv'
     data = pd.read_csv(path)
-    # print("Data Shape: {}\n".format(data.shape))
-    st.dataframe(data.head())
+    st.write('Train Delay Data')
+    st.dataframe(data.head(10))
+    st.write("Data Shape: {}\n".format(data.shape))
     
     
     ###########################################################################
     
     # data.info()
     # data.isnull().sum()
+    st.header("Exploratory Data Analysis")
 
+    st.write("Dropping Redundant Feature Variables: ['RELATION_DIRECTION', 'REAL_TIME_ARR', 'LINE_NO_DEP', 'LINE_NO_ARR']")
     # data.drop(columns = ['LINE_NO_DEP', 'LINE_NO_ARR'], axis=1, inplace=True)
     data.dropna(subset = ['RELATION_DIRECTION', 'REAL_TIME_ARR', 'LINE_NO_DEP', 'LINE_NO_ARR'], inplace = True)
+    st.dataframe(data.head())
 
-    print('Total Null Values: {}'.format(data.isnull().sum().sum()))
+    st.subheader("Checking Null Values")
+    st.dataframe(data.isnull().sum())
+    st.write('Total Null Values: {}'.format(data.isnull().sum().sum()))
 
+    st.subheader("Formating Date and Time Entries")
     #
     data.REAL_TIME_ARR    = pd.to_datetime(data.REAL_TIME_ARR, format = '%H:%M:%S').dt.time
     data.REAL_TIME_DEP    = pd.to_datetime(data.REAL_TIME_DEP, format = '%H:%M:%S').dt.time
@@ -79,22 +86,31 @@ def app():
 
     st.dataframe(data.tail())
 
+    # st.write('Total No.of Trains: {}'.format(len(data.TRAIN_NO.unique())))
+
     ###########################################################################
+
+    st.header("Visualising Data")
 
     st.write('TRAIN DELAYS in ARRIVAL   : {} Seconds :: {} Hours'.format(round(data.groupby('DATDEP')['DELAY_ARR'].mean().sum(), 3), str(timedelta(seconds=data.groupby('DATDEP')['DELAY_ARR'].mean().sum()))))
     st.write('TRAIN DELAYS in DEPARTURE : {} Seconds :: {} Hours'.format(round(data.groupby('DATDEP')['DELAY_DEP'].mean().sum(), 3), str(timedelta(seconds=data.groupby('DATDEP')['DELAY_DEP'].mean().sum()))))
 
     delayARR = pd.DataFrame(data.groupby('DATDEP')['DELAY_ARR'].mean()).reset_index()
+    st.subheader("Delay Data")
+    st.write("Based on Group By Departure Date alongwith Delay in Arrival")
+    st.dataframe(delayARR)
 
+    st.subheader('DELAYS IN TRAIN ARRIVAL')
     fig = px.bar(delayARR, x = delayARR.DATDEP, y = delayARR.DELAY_ARR, color = delayARR.DELAY_ARR)
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-    fig.update_layout(height=500, width=1200, xaxis_title="Date", yaxis_title="Train Delay (in Seconds)", title_text="DELAYS IN TRAIN ARRIAL") 
+    fig.update_layout(height=500, width=1200, xaxis_title="Date", yaxis_title="Train Delay (in Seconds)", title_text="DELAYS IN TRAIN ARRIVAL") 
     # fig.show()
     st.plotly_chart(fig)
 
     delayDEP = pd.DataFrame(data.groupby('DATDEP')['DELAY_DEP'].mean()).reset_index()
 
+    st.subheader('DELAYS IN TRAIN DEPATTURES')
     fig = px.bar(delayDEP, x = delayDEP.DATDEP, y = delayDEP.DELAY_DEP, color = delayDEP.DELAY_DEP)
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
@@ -105,4 +121,4 @@ def app():
     st.write('Average Time Delay')
     st.dataframe(pd.DataFrame(data.groupby('DATDEP')['DELAY_ARR'].mean()).reset_index())
 
-    st.write('[Notebook](https://github.com/Utpal-Mishra/Omdena-Berlin-Chapter-2023/blob/main/OmdenaBerlinChapter2023Part2.ipynb)')
+    st.write('[Notebook](https://github.com/Utpal-Mishra/Omdena-Berlin-Chapter-2023/blob/main/OmdenaBerlinChapter2023Part3.ipynb)')
