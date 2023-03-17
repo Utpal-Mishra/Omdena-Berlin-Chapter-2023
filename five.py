@@ -102,4 +102,5 @@ def app():
     data['WEEKDAY']     = data['REAL_DATE_ARR'].apply(lambda x: x.strftime('%A'))
 
     st.dataframe(data.tail())
-
+    
+    

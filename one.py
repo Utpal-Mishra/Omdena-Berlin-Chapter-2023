@@ -125,8 +125,12 @@ def app():
     M3 = coach.groupby('Countries').sum().add(car.groupby('Countries').sum()).reset_index()
     M4 = M3.groupby('Countries').sum().add(train.groupby('Countries').sum()).reset_index()
 
+    st.write('ABOUT DATA')
+    st.write("""The initial approach is to examine the signifiance of widely used transportation channels - Air, Freight and Inland - in/ via Berlin and the engagement of the commuters on a day to day basis.
+                The extracted data comprises details collected from more than a decade of records throughout the Europian Union.""")
+
     # if st.checkbox("Show DataFrame"):    
-    st.dataframe(air) # data
+    # st.dataframe(air) # data
 
     st.header("Exploratory Data Analysis")
 
@@ -136,14 +140,16 @@ def app():
     
         air = air.rename(columns = {'TIME': 'Countries'})
         # air.tail()
+        st.write('Air Transport Data')
         st.dataframe(air)
 
         air = air.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         air.sort_values(["Countries", "Year"], inplace = True)
         # air.head()
+        st.write('Formatting the Respective Data - More than Year Columns into Rows')
         st.dataframe(air)
         
-        st.subheader("Scatter Plot")  
+        st.write("Plotting Bar Plot to Analyse Frequency of Passengers Traveling Across Countries via Air Transport")  
         
         # Bar Plot
         # if st.checkbox("Frequency of Passengers Traveling"): 
@@ -158,54 +164,84 @@ def app():
 
     if st.checkbox("Freight Transport"):
     
+        roads = roads.rename(columns = {'TIME': 'Countries'})
+        # roads.tail()
+        st.write('Freight Transport Data - Roads')
+        st.dataframe(roads)
+
         roads = roads.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         roads.sort_values(["Countries", "Year"], inplace = True)
         # roads.head()
+        st.write('Formatting the Respective Data - More than Year Columns into Rows')
         st.dataframe(roads)
+
+        st.write('Frequency of Passengers Traveling Across Countries via Freight Transport - Roads')
       
         # Bar Plot
         # if st.checkbox("Frequency of Passengers Traveling"): 
         fig = px.bar(roads, x="Countries", y="Passengers Frequency", animation_frame="Year", color="Countries", barmode="group")
         fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
         fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Freight - Roads")
+        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Freight Transport - Roads")
         # fig.show()
         st.plotly_chart(fig)
         
         ##########################################################################################
 
+        rail = rail.rename(columns = {'TIME': 'Countries'})
+        # rail.tail()
+        st.write('Freight Transport Data - Rail')
+        st.dataframe(rail)
+
         rail = rail.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         rail.sort_values(["Countries", "Year"], inplace = True)
         # rail.head()
+        st.write('Formatting the Respective Data - More than Year Columns into Rows')
+        st.dataframe(rail)
+
+        st.write('Frequency of Passengers Traveling Across Countries via Freight Transport - Rail')
 
         # Bar Plot
         # if st.checkbox("Frequency of Passengers Traveling"): 
         fig = px.bar(rail, x="Countries", y="Passengers Frequency", animation_frame="Year", color="Countries", barmode="group")
         fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
         fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Freight - Rail")
+        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Freight Transport - Rail")
         # fig.show()
         st.plotly_chart(fig)  
 
         ##########################################################################################
 
+        water = water.rename(columns = {'TIME': 'Countries'})
+        # water.tail()
+        st.write('Freight Transport Data - Water')
+        st.dataframe(water)
+
         water = water.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         water.sort_values(["Countries", "Year"], inplace = True)
         # water.head()
+        st.write('Formatting the Respective Data - More than Year Columns into Rows')
+        st.dataframe(water)
+
+        st.write('Frequency of Passengers Traveling Across Countries via Freight Transport - Water')
 
         # Bar Plot
         # if st.checkbox("Frequency of Passengers Traveling"): 
         fig = px.bar(water, x="Countries", y="Passengers Frequency", animation_frame="Year", color="Countries", barmode="group")
         fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
         fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Freight - Waterways")
+        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Freight Transport - Waterways")
         # fig.show()
         st.plotly_chart(fig)
 
         ##########################################################################################
 
+        st.write('Orthographics Plot on Frequency of Passengers Traveling Across Countries via Freight')
+
         data = M2.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         data.sort_values(["Countries", "Year"], inplace = True)
+        st.write('Freight Transport Data')
+        st.dataframe(data.head())
 
         Country = []
         Longitude = []
@@ -243,58 +279,80 @@ def app():
                             hover_name="Countries",
                             projection = "orthographic", 
                             width = 1400,
-                            height = 600, 
+                            height = 700, 
                             color = "Countries")
-        fig.update(layout_coloraxis_showscale=False)
+        fig.update(layout_coloraxis_showscale=True)
         # fig.show()
         st.plotly_chart(fig)
 
     ##########################################################################################################################
 
-    if st.checkbox("Inland Waterways"):
+    if st.checkbox("Inland"):
     
-        air = air.rename(columns = {'TIME': 'Countries'})
+        coach = coach.rename(columns = {'TIME': 'Countries'})
         # air.tail()
-        st.dataframe(air)
+        st.write('Inland Transport Data - Motor Coaches')
+        st.dataframe(coach)
 
         coach = coach.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         coach.sort_values(["Countries", "Year"], inplace = True)
         #coach.head()
+        st.write('Formatting the Respective Data - More than Year Columns into Rows')
+        st.dataframe(coach)
 
+        st.write('Frequency of Passengers Traveling Across Countries via Inland Transport- Motor Coaches')
+        
         # Bar Plot
         fig = px.bar(coach, x="Countries", y="Passengers Frequency", animation_frame="Year", color="Countries", barmode="group")
         fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
         fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Inland Passenger - Motor Coaches")
+        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Inland Transport - Motor Coaches")
         # fig.show()
         st.plotly_chart(fig)
        
         ##########################################################################################
 
+        car = car.rename(columns = {'TIME': 'Countries'})
+        # car.tail()
+        st.write('Inland Transport Data - Passenger Cars')
+        st.dataframe(car)
 
         car = car.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         car.sort_values(["Countries", "Year"], inplace = True)
         #car.head()
+        st.write('Formatting the Respective Data - More than Year Columns into Rows')
+        st.dataframe(car)
+
+        st.write('Frequency of Passengers Traveling Across Countries via Inland Transport - Passenger Cars')
 
         # Bar Plot
         fig = px.bar(car, x="Countries", y="Passengers Frequency", animation_frame="Year", color="Countries", barmode="group")
         fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
         fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Inland Passenger - Passenger Cars")
+        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Inland Transport - Passenger Cars")
         # fig.show()
         st.plotly_chart(fig)
 
         ##########################################################################################      
 
+        train = train.rename(columns = {'TIME': 'Countries'})
+        # train.tail()
+        st.write('Inland Transport Data - Trains')
+        st.dataframe(train)
+
         train = train.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         train.sort_values(["Countries", "Year"], inplace = True)
         train.head()
+        st.write('Formatting the Respective Data - More than Year Columns into Rows')
+        st.dataframe(train)
+
+        st.write('Frequency of Passengers Traveling Across Countries via Inland Transport - Train')
 
         # Bar Plot
         fig = px.bar(train, x="Countries", y="Passengers Frequency", animation_frame="Year", color="Countries", barmode="group")
         fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
         fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
-        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Inland Passenger - Train")
+        fig.update_layout(height=600, width=1400, plot_bgcolor="black", title_text="Frequency of Passengers Traveling Across Countries via Inland Transport - Train")
         # fig.show()
         st.plotly_chart(fig)
 
