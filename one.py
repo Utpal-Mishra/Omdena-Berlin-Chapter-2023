@@ -243,7 +243,7 @@ def app():
                             hover_name="Countries",
                             projection = "orthographic", 
                             width = 1400,
-                            height = 800, 
+                            height = 600, 
                             color = "Countries")
         fig.update(layout_coloraxis_showscale=False)
         # fig.show()

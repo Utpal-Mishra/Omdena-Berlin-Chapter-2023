@@ -1,13 +1,14 @@
 import streamlit as st
 
 def app():
-    st.write("")
-    st.write("")
-    st.write("")
-    
+        
     st.title("OMDENA BERLIN CHAPTER 2021")
     
-    st.write("")
+    video = open('Berlin.mp4', 'rb')
+    videoFile = video.read()
+
+    st.video(videoFile, format="video/mp4", start_time=0)
+
     st.write("")
     st.write("")
     
