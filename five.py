@@ -73,12 +73,18 @@ def app():
     
     # data.info()
     # data.isnull().sum()
+    st.header("Exploratory Data Analysis")
 
+    st.write("Dropping Redundant Feature Variables: ['RELATION_DIRECTION', 'REAL_TIME_ARR', 'LINE_NO_DEP', 'LINE_NO_ARR']")
     # data.drop(columns = ['LINE_NO_DEP', 'LINE_NO_ARR'], axis=1, inplace=True)
     data.dropna(subset = ['RELATION_DIRECTION', 'REAL_TIME_ARR', 'LINE_NO_DEP', 'LINE_NO_ARR'], inplace = True)
+    st.dataframe(data.head())
 
+    st.subheader("Checking Null Values")
+    st.dataframe(data.isnull().sum())
     st.write('Total Null Values: {}'.format(data.isnull().sum().sum()))
 
+    st.subheader("Formating Date and Time Entries")
     #
     data.REAL_TIME_ARR    = pd.to_datetime(data.REAL_TIME_ARR, format = '%H:%M:%S').dt.time
     data.REAL_TIME_DEP    = pd.to_datetime(data.REAL_TIME_DEP, format = '%H:%M:%S').dt.time
@@ -97,10 +103,37 @@ def app():
     data.RELATION   = pd.Categorical(data.RELATION)
     data.TRAIN_SERV = pd.Categorical(data.TRAIN_SERV)
 
-    data['ORIGIN']      = data.RELATION_DIRECTION.apply(lambda x: x.split(':')[1].split(' ->')[0])
-    data['DESTINATION'] = data.RELATION_DIRECTION.apply(lambda x: x.split(':')[1].split('> ')[1])
-    data['WEEKDAY']     = data['REAL_DATE_ARR'].apply(lambda x: x.strftime('%A'))
-
     st.dataframe(data.tail())
-    
-    
+
+    # st.write('Total No.of Trains: {}'.format(len(data.TRAIN_NO.unique())))
+
+    ###########################################################################
+
+    st.header("Visualising Data")
+
+    railOp              = data[['TRAIN_SERV', 'DELAY_ARR', 'DELAY_DEP']]
+    railOp['DEP_STAT']  = railOp.DELAY_DEP.apply(lambda x: 'Earlier Dep' if x>0 else 'Late Dep')
+    railOp['ARR_STAT']  = railOp.DELAY_ARR.apply(lambda x: 'Earlier Arr' if x>0 else 'Late Arr')
+    st.subheader("Train Operator Data")
+    st.write("Based on Group By Train Operator with Features Representing Arrivals and Departures")
+    st.dataframe(railOp)
+        
+    arr = pd.DataFrame(railOp.groupby(['TRAIN_SERV', 'ARR_STAT'])['DELAY_ARR'].first()).reset_index()
+
+    st.subheader('Frequency of Trains Operators at Arrivals')
+    fig = px.histogram(arr, x = arr.TRAIN_SERV, y = arr.DELAY_ARR, color = arr.ARR_STAT,  barmode='group')
+    fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
+    fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
+    fig.update_layout(height=500, width=700, xaxis_title="Train Operators", yaxis_title="Frequency of Trains Operators", title_text="Frequency of Trains Operators in Berlin") 
+    fig.show()
+        
+    dep = pd.DataFrame(railOp.groupby(['TRAIN_SERV', 'DEP_STAT'])['DELAY_DEP'].first()).reset_index()
+
+    st.subheader('Frequency of Trains Operators at Departures')
+    fig = px.histogram(dep, x = dep.TRAIN_SERV, y = dep.DELAY_DEP, color = dep.DEP_STAT,  barmode='group')
+    fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
+    fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
+    fig.update_layout(height=500, width=700, xaxis_title="Train Operators", yaxis_title="Frequency of Trains Operators", title_text="Frequency of Trains Operators in Berlin") 
+    fig.show()
+
+    st.write('[Notebook](https://github.com/Utpal-Mishra/Omdena-Berlin-Chapter-2023/blob/main/OmdenaBerlinChapter2023Part5.ipynb)')
