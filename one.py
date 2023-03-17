@@ -132,7 +132,7 @@ def app():
     # if st.checkbox("Show DataFrame"):    
     # st.dataframe(air) # data
 
-    st.header("Exploratory Data Analysis")
+    st.subheader("Exploratory Data Analysis")
 
     ##########################################################################################################################
 
@@ -142,6 +142,7 @@ def app():
         # air.tail()
         st.write('Air Transport Data')
         st.dataframe(air)
+        st.write("Data Shape: {}\n".format(air.shape))
 
         air = air.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         air.sort_values(["Countries", "Year"], inplace = True)
@@ -168,6 +169,7 @@ def app():
         # roads.tail()
         st.write('Freight Transport Data - Roads')
         st.dataframe(roads)
+        st.write("Data Shape: {}\n".format(roads.shape))
 
         roads = roads.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         roads.sort_values(["Countries", "Year"], inplace = True)
@@ -192,6 +194,7 @@ def app():
         # rail.tail()
         st.write('Freight Transport Data - Rail')
         st.dataframe(rail)
+        st.write("Data Shape: {}\n".format(rail.shape))
 
         rail = rail.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         rail.sort_values(["Countries", "Year"], inplace = True)
@@ -216,6 +219,7 @@ def app():
         # water.tail()
         st.write('Freight Transport Data - Water')
         st.dataframe(water)
+        st.write("Data Shape: {}\n".format(water.shape))
 
         water = water.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         water.sort_values(["Countries", "Year"], inplace = True)
@@ -242,6 +246,7 @@ def app():
         data.sort_values(["Countries", "Year"], inplace = True)
         st.write('Freight Transport Data')
         st.dataframe(data.head())
+        st.write("Data Shape: {}\n".format(data.shape))
 
         Country = []
         Longitude = []
@@ -293,6 +298,7 @@ def app():
         # air.tail()
         st.write('Inland Transport Data - Motor Coaches')
         st.dataframe(coach)
+        st.write("Data Shape: {}\n".format(coach.shape))
 
         coach = coach.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         coach.sort_values(["Countries", "Year"], inplace = True)
@@ -316,6 +322,7 @@ def app():
         # car.tail()
         st.write('Inland Transport Data - Passenger Cars')
         st.dataframe(car)
+        st.write("Data Shape: {}\n".format(car.shape))
 
         car = car.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         car.sort_values(["Countries", "Year"], inplace = True)
@@ -339,6 +346,7 @@ def app():
         # train.tail()
         st.write('Inland Transport Data - Trains')
         st.dataframe(train)
+        st.write("Data Shape: {}\n".format(train.shape))
 
         train = train.melt(id_vars=["Countries"], var_name = "Year", value_name = "Passengers Frequency")
         train.sort_values(["Countries", "Year"], inplace = True)
