@@ -110,7 +110,7 @@ def app():
 
     delayDEP = pd.DataFrame(data.groupby('DATDEP')['DELAY_DEP'].mean()).reset_index()
 
-    st.subheader('DELAYS IN TRAIN DEPATTURES')
+    st.subheader('DELAYS IN TRAIN DEPARTURES')
     fig = px.bar(delayDEP, x = delayDEP.DATDEP, y = delayDEP.DELAY_DEP, color = delayDEP.DELAY_DEP)
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)

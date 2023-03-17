@@ -43,19 +43,24 @@ def app():
     path = 'Data_raw_punctuality_202301.csv'
     data = pd.read_csv(path)
     # print("Data Shape: {}\n".format(data.shape))
-    st.dataframe(data.head())
-    
+    st.dataframe(data.head(10))
     
     ###########################################################################
     
     # data.info()
     # data.isnull().sum()
+    st.header("Exploratory Data Analysis")
 
+    st.write("Dropping Redundant Feature Variables: ['RELATION_DIRECTION', 'REAL_TIME_ARR', 'LINE_NO_DEP', 'LINE_NO_ARR']")
     # data.drop(columns = ['LINE_NO_DEP', 'LINE_NO_ARR'], axis=1, inplace=True)
     data.dropna(subset = ['RELATION_DIRECTION', 'REAL_TIME_ARR', 'LINE_NO_DEP', 'LINE_NO_ARR'], inplace = True)
+    st.dataframe(data.head())
 
-    print('Total Null Values: {}'.format(data.isnull().sum().sum()))
+    st.subheader("Checking Null Values")
+    st.dataframe(data.isnull().sum())
+    st.write('Total Null Values: {}'.format(data.isnull().sum().sum()))
 
+    st.subheader("Formating Date and Time Entries")
     #
     data.REAL_TIME_ARR    = pd.to_datetime(data.REAL_TIME_ARR, format = '%H:%M:%S').dt.time
     data.REAL_TIME_DEP    = pd.to_datetime(data.REAL_TIME_DEP, format = '%H:%M:%S').dt.time
@@ -76,13 +81,19 @@ def app():
 
     st.dataframe(data.tail())
 
-    print('Total No.of Trains: {}'.format(len(data.TRAIN_NO.unique())))
+    # st.write('Total No.of Trains: {}'.format(len(data.TRAIN_NO.unique())))
 
     ###########################################################################
 
+    st.header("Visualising Data")
+
     trainsFrequency = pd.DataFrame(data.TRAIN_NO.value_counts()[:25]).reset_index()
     trainsFrequency.rename({'index': 'TRAIN_NO', 'TRAIN_NO': 'FREQUENCY'}, axis = 1, inplace = True)
+    st.subheader("Train Data")
+    st.write("Based on Group By Train NUmber")
+    st.dataframe(trainsFrequency)
 
+    st.subheader('FREQUENCY OF TRAINS')
     fig = px.bar(trainsFrequency, x = trainsFrequency['TRAIN_NO'], y = trainsFrequency['FREQUENCY'], color = trainsFrequency['FREQUENCY'])
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
@@ -90,4 +101,4 @@ def app():
     # fig.show()
     st.plotly_chart(fig)
 
-    st.write('[Notebook](https://github.com/Utpal-Mishra/Omdena-Berlin-Chapter-2023/blob/main/OmdenaBerlinChapter2023Part2.ipynb)')
+    st.write('[Notebook](https://github.com/Utpal-Mishra/Omdena-Berlin-Chapter-2023/blob/main/OmdenaBerlinChapter2023Part4.ipynb)')
