@@ -11,3 +11,7 @@ dependencies:
   - datetime
   - sys
   - requests
+  - sys
+  - time
+  - matplotlib
+  - datetime
