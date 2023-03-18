@@ -11,7 +11,8 @@ dependencies:
   - datetime
   - sys
   - requests
-  - sys
-  - time
-  - matplotlib
-  - datetime
+  - streamlit
+  - folium
+  - geopy
+  - IPython
+  - streamlit_folium
