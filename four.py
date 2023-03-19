@@ -104,4 +104,30 @@ def app():
     # fig.show()
     st.plotly_chart(fig)
 
+    st.write("Based on Group By Train Numbers with Features Representing Arrivals and Departures")
+    trainNo              = data[['TRAIN_NO', 'DELAY_ARR', 'DELAY_DEP']]
+    trainNo['DEP_STAT']  = trainNo.DELAY_DEP.apply(lambda x: 'Earlier Dep' if x>0 else 'Late Dep')
+    trainNo['ARR_STAT']  = trainNo.DELAY_ARR.apply(lambda x: 'Earlier Arr' if x>0 else 'Late Arr')
+    st.dataframe(trainNo.tail())
+
+    st.subheader('Frequency of Trains at Arrivals')
+    arr = pd.DataFrame(trainNo.groupby(['TRAIN_NO', 'ARR_STAT'])['DELAY_ARR'].first()).reset_index()
+
+    fig = px.histogram(arr, x = arr.TRAIN_NO, y = arr.DELAY_ARR, color = arr.ARR_STAT,  barmode='group')
+    fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
+    fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
+    fig.update_layout(height=500, width=1200, xaxis_title="Train Numbers", yaxis_title="Frequency of Trains Numbers", title_text="Frequency of Trains Numbers in Berlin") 
+    # fig.show()
+    st.plotly_chart(fig)
+
+    st.subheader('Frequency of Trains at Departures')
+    dep = pd.DataFrame(trainNo.groupby(['TRAIN_NO', 'DEP_STAT'])['DELAY_DEP'].first()).reset_index()
+
+    fig = px.histogram(dep, x = dep.TRAIN_NO, y = dep.DELAY_DEP, color = dep.DEP_STAT,  barmode='group')
+    fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
+    fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
+    fig.update_layout(height=500, width=1200, xaxis_title="Train Numbers", yaxis_title="Frequency of Trains Numbers", title_text="Frequency of Trains Numbers in Berlin") 
+    # fig.show()
+    st.plotly_chart(fig)
+
     st.write('[Notebook](https://github.com/Utpal-Mishra/Omdena-Berlin-Chapter-2023/blob/main/OmdenaBerlinChapter2023Part4.ipynb)')
