@@ -17,6 +17,8 @@ from plotly.subplots import make_subplots
 
 from streamlit_metrics import metric, metric_row
 
+print('Folium Installed')
+print('Libraries Imported')
 
 sys.setrecursionlimit(100000)
 #print("Installed Dependencies")
@@ -102,7 +104,7 @@ def app():
     dep = pd.DataFrame(delay.groupby(['DEP_STAT'])['DELAY_DEP'].mean()).reset_index()
     arr = pd.DataFrame(delay.groupby(['ARR_STAT'])['DELAY_ARR'].mean()).reset_index()
 
-    st.subheader("PIE PLOT")
+    st.subheader("Percentage of Earlier Arrival vs Late Delays via Berlin Train Station")
     # Create subplots: use 'domain' type for Pie subplot
     fig = make_subplots(rows=1, cols=2, specs=[[{'type':'domain'}, {'type':'domain'}]])
     fig.add_trace(go.Pie(labels=dep.DEP_STAT, values=dep.DELAY_DEP, hole=.5, pull=[0, 0.2], name="Departures"), 1, 1)

@@ -85,7 +85,7 @@ def app():
     path = 'Data_raw_punctuality_202301.csv'
     data = pd.read_csv(path)
     st.write("Data Shape: {}\n".format(data.shape))
-    st.dataframe(data.head())
+    st.dataframe(data.head(10))
     
     ###########################################################################
     
@@ -130,9 +130,7 @@ def app():
     # st.write('Total No.of Trains: {}'.format(len(data.TRAIN_NO.unique())))
 
     ###########################################################################
-    
-    st.header("Exploratory Data Analysis")
-    
+        
     mapData = pd.DataFrame(data.RELATION_DIRECTION.unique())
     mapData['ORIGIN']      = mapData[0].apply(lambda x: x.split(':')[1].split(' ->')[0])
     mapData['DESTINATION'] = mapData[0].apply(lambda x: x.split(':')[1].split('> ')[1])
@@ -198,14 +196,13 @@ def app():
     longitude = location.longitude
     st.write('The geograpical coordinate of Berlin are {}, {}.'.format(latitude, longitude))
 
-    """map = folium.Map(location = [latitude, longitude], zoom_start = 12, tiles = 'Stamen Terrain')
+    map = folium.Map(location = [latitude, longitude], zoom_start = 14) # tiles = 'Stamen Terrain')
     # map
     # folium_static(map)
 
     ########################################################################### 
 
     incidents = folium.map.FeatureGroup()
-
     incidents.add_child(folium.CircleMarker([latitude, longitude], 
                                                 radius = 5, 
                                                 color = 'red', 
@@ -213,11 +210,57 @@ def app():
     map.add_child(incidents)
     folium.Marker([latitude, longitude], popup = 'Berlin').add_to(map)
     # map
-    folium_static(map)"""
+    folium_static(map)
 
     ########################################################################### 
 
-    map = folium.Map(location = [latitude, longitude], zoom_start = 12, tiles = 'Stamen Terrain')
+    st.subheader('Folium Map with Train Stations Connected to Berlin')
+
+    map = folium.Map(location = [latitude, longitude], zoom_start = 6) # tiles = 'Stamen Terrain')
+
+    incidents = folium.map.FeatureGroup()
+
+    # Berlin label
+    incidents.add_child(folium.CircleMarker([latitude, longitude], 
+                                                radius = 5, 
+                                                color = 'red', 
+                                                fill_color = 'red'))
+    map.add_child(incidents)
+    folium.Marker([latitude, longitude], popup = 'Berlin').add_to(map)
+
+    incidents = folium.map.FeatureGroup()
+
+    # loop through the origin stations and add each to the incidents feature group
+    for lat, lng, in zip(mapData.Dep_Lat, mapData.Dep_Long):
+        incidents.add_child(
+            folium.CircleMarker(
+                [lat, lng],
+                radius=5, # define how big you want the circle markers to be
+                color='yellow',
+                fill=True,
+                fill_color='blue',
+                fill_opacity=0.6
+            )
+        )
+      
+    # add pop-up text to each marker on the map
+    latitudes = list(mapData.Dep_Lat)
+    longitudes = list(mapData.Dep_Long)
+    labels = list(mapData.ORIGIN)
+
+    for lat, lng, label in zip(latitudes, longitudes, labels):
+        folium.Marker([lat, lng], popup=label).add_to(map)    
+        
+    # add incidents to map
+    map.add_child(incidents)
+    # map
+    folium_static(map)
+
+    ########################################################################### 
+
+    st.subheader('Folium Map with Train Network')
+
+    map = folium.Map(location = [latitude, longitude], zoom_start = 6)
 
     Dep_Longitude = mapData.Dep_Long.astype(float).tolist()
     Dep_Latitude  = mapData.Dep_Lat.astype(float).tolist()
@@ -232,9 +275,12 @@ def app():
     for index, lat in enumerate(Dep_Latitude):
         folium.Marker([lat, 
                       Dep_Longitude[index]],
-                      popup=('Bus Station: {} \n '.format(index)),
+                      popup=('Train Station: {} \n '.format(index)),
                       icon = folium.Icon(color = 'blue', icon_color = 'white', prefix = 'fa', icon = 'train')).add_to(map)
-        
+    
+    folium.PolyLine(Points, color = 'red', weight = 3, opacity = 1,
+                tooltip = 'Trains Route').add_to(map)
+    
     folium_static(map)
 
     ########################################################################### 

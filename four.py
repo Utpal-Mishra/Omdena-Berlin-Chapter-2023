@@ -17,6 +17,8 @@ from plotly.subplots import make_subplots
 
 from streamlit_metrics import metric, metric_row
 
+print('Folium Installed')
+print('Libraries Imported')
 
 sys.setrecursionlimit(100000)
 #print("Installed Dependencies")
@@ -81,7 +83,7 @@ def app():
 
     st.dataframe(data.tail())
 
-    # st.write('Total No.of Trains: {}'.format(len(data.TRAIN_NO.unique())))
+    st.write('Total No.of Trains: {}'.format(len(data.TRAIN_NO.unique())))
 
     ###########################################################################
 
@@ -90,10 +92,11 @@ def app():
     trainsFrequency = pd.DataFrame(data.TRAIN_NO.value_counts()[:25]).reset_index()
     trainsFrequency.rename({'index': 'TRAIN_NO', 'TRAIN_NO': 'FREQUENCY'}, axis = 1, inplace = True)
     st.subheader("Train Data")
-    st.write("Based on Group By Train NUmber")
+    st.write("Based on Group By Train Number")
     st.dataframe(trainsFrequency)
 
-    st.subheader('FREQUENCY OF TRAINS')
+    st.subheader('Bar Plot')
+    st.write('Frequency of Trains')
     fig = px.bar(trainsFrequency, x = trainsFrequency['TRAIN_NO'], y = trainsFrequency['FREQUENCY'], color = trainsFrequency['FREQUENCY'])
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)

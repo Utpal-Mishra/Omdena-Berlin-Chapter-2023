@@ -18,6 +18,8 @@ from plotly.subplots import make_subplots
 
 from streamlit_metrics import metric, metric_row
 
+print('Folium Installed')
+print('Libraries Imported')
 
 sys.setrecursionlimit(100000)
 #print("Installed Dependencies")
@@ -100,7 +102,7 @@ def app():
     st.write("Based on Group By Departure Date alongwith Delay in Arrival")
     st.dataframe(delayARR)
 
-    st.subheader('DELAYS IN TRAIN ARRIVAL')
+    st.subheader('Ddelay in Train Arrivals')
     fig = px.bar(delayARR, x = delayARR.DATDEP, y = delayARR.DELAY_ARR, color = delayARR.DELAY_ARR)
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
@@ -110,7 +112,7 @@ def app():
 
     delayDEP = pd.DataFrame(data.groupby('DATDEP')['DELAY_DEP'].mean()).reset_index()
 
-    st.subheader('DELAYS IN TRAIN DEPARTURES')
+    st.subheader('Delay in Train Departures')
     fig = px.bar(delayDEP, x = delayDEP.DATDEP, y = delayDEP.DELAY_DEP, color = delayDEP.DELAY_DEP)
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)

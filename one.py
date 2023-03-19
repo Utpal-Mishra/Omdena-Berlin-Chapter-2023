@@ -40,8 +40,8 @@ from pandas import json_normalize
 #!conda install -c conda-forge folium=0.5.0 --yes
 import folium # plotting library
 
-print('Folium installed')
-print('Libraries imported.')
+print('Folium Installed')
+print('Libraries Imported')
 
 import json # library to handle JSON files
 

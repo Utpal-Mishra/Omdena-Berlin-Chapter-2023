@@ -38,8 +38,8 @@ from IPython.core.display import HTML
 #!conda install -c conda-forge folium=0.5.0 --yes
 import folium # plotting library
 
-print('Folium installed')
-print('Libraries Imported.')
+print('Folium Installed')
+print('Libraries Imported')
 
 sys.setrecursionlimit(100000)
 #print("Installed Dependencies")
@@ -125,7 +125,8 @@ def app():
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_layout(height=500, width=700, xaxis_title="Train Operators", yaxis_title="Frequency of Trains Operators", title_text="Frequency of Trains Operators in Berlin") 
-    fig.show()
+    # fig.show()
+    st.plotly_chart(fig)
         
     dep = pd.DataFrame(railOp.groupby(['TRAIN_SERV', 'DEP_STAT'])['DELAY_DEP'].first()).reset_index()
 
@@ -134,6 +135,7 @@ def app():
     fig.update_xaxes(rangeslider_visible=False, showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_yaxes(showline=True, linewidth=2, linecolor='black', mirror=True)
     fig.update_layout(height=500, width=700, xaxis_title="Train Operators", yaxis_title="Frequency of Trains Operators", title_text="Frequency of Trains Operators in Berlin") 
-    fig.show()
+    # fig.show()
+    st.plotly_chart(fig)
 
     st.write('[Notebook](https://github.com/Utpal-Mishra/Omdena-Berlin-Chapter-2023/blob/main/OmdenaBerlinChapter2023Part5.ipynb)')

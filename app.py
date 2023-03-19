@@ -4,7 +4,7 @@ import two
 import three
 import four
 import five
-import seven
+import foliumMap
 import status
 
 import streamlit as st
@@ -18,7 +18,7 @@ PAGES = {
     "Delay via Date": three,
     "Delay via Train No.": four,
     "Delay via Railway Operator": five,
-    "Map": seven,
+    "Map": foliumMap,
     "Train Status": status
 }
 
